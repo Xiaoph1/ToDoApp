@@ -5,11 +5,9 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 // 1. 修正：导入 Android 系统的 Context（关键！）
 import android.content.Context
-import androidx.room.TypeConverter
 import androidx.room.TypeConverters
 // 导入你的实体类和 Dao 接口（确保路径正确）
-import com.example.todoapp.data.ToDoData
-import com.example.todoapp.data.ToDoDao
+import com.example.todoapp.data.models.ToDoData
 
 @Database(entities = [ToDoData::class],version = 1,exportSchema = false)
 @TypeConverters(Converter::class)
