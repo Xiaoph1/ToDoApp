@@ -11,7 +11,6 @@ import com.example.todoapp.data.models.ToDoData
 
 @Database(entities = [ToDoData::class],version = 1,exportSchema = false)
 @TypeConverters(Converter::class)
-
 abstract class ToDoDatabase:RoomDatabase() {
 
     abstract fun toDoDao():ToDoDao
@@ -31,7 +30,7 @@ abstract class ToDoDatabase:RoomDatabase() {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     ToDoDatabase::class.java,
-                    "toda_database"
+                    "todo_database"
                 ).build()
                 INSTANCE = instance
                 return instance

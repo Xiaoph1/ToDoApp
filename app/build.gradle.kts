@@ -1,20 +1,25 @@
 plugins {
-    alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
+    id("com.android.application")
+    id("kotlin-android")
+    id("kotlin-kapt")
+    id("androidx.navigation.safeargs.kotlin")
+    id("kotlin-parcelize")
 }
 
 android {
-    namespace = "com.example.todoapp"
-    compileSdk = 36
-
     defaultConfig {
         applicationId = "com.example.todoapp"
-        minSdk = 24
-        targetSdk = 36
+        compileSdk = 34
+        minSdk = 26
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildFeatures {
+        viewBinding = true // 启用视图绑定
     }
 
     buildTypes {
@@ -26,34 +31,61 @@ android {
             )
         }
     }
+
+    buildFeatures {
+        dataBinding = true
+        viewBinding = true
+    }
+
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
+
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = JavaVersion.VERSION_17.toString()
     }
+
+    sourceSets {
+        getByName("main") {
+            kotlin {
+                srcDirs("build/generated/source/navigation-args")
+            }
+        }
+    }
+
+    namespace = "com.example.todoapp"
+//    buildToolsVersion = "33.0.1"
 }
 
 dependencies {
+    implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
+    implementation("androidx.core:core-ktx:1.10.1")
+    implementation("androidx.appcompat:appcompat:1.6.1")
+    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    implementation("androidx.legacy:legacy-support-v4:1.0.0")
+    testImplementation("junit:junit:4.13.2")
+    androidTestImplementation("androidx.test.ext:junit:1.1.5")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
+    // Navigation Component
+    implementation("androidx.navigation:navigation-fragment-ktx:2.6.0")
+    implementation("androidx.navigation:navigation-ui-ktx:2.6.0")
+
+    // Room components
+    implementation("androidx.room:room-runtime:2.8.3")
+    kapt("androidx.room:room-compiler:2.8.3")
+    implementation("androidx.room:room-ktx:2.8.3")
+    androidTestImplementation("androidx.room:room-testing:2.8.3")
     implementation(libs.material)
-    implementation(libs.androidx.activity)
-    implementation(libs.androidx.constraintlayout)
-    implementation(libs.androidx.navigation.fragment.ktx)
-    implementation(libs.androidx.navigation.ui.ktx)
-    implementation(libs.androidx.fragment)
-    implementation(libs.androidx.recyclerview)
-    implementation(libs.androidx.room.common.jvm)
-    implementation(libs.androidx.room.compiler)
-    implementation(libs.androidx.room.runtime.android)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
 
-    implementation("androidx.navigation:navigation-fragment-ktx:2.7.7")
-    implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
+    // Lifecycle components (注释部分保持不变)
+     implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
+     implementation("androidx.lifecycle:lifecycle-common-java8:2.5.1")
+     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1")
+
+    // Kotlin components (注释部分保持不变)
+     api("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
+     api("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
+
 }
