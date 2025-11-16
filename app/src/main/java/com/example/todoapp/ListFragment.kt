@@ -41,9 +41,6 @@ class ListFragment : Fragment() {
             findNavController().navigate(R.id.action_listFragment_to_addFragment)
         }
 
-        view.setOnClickListener{
-            findNavController().navigate(R.id.action_listFragment_to_updateFragment)
-        }
 
         //set menu
         setHasOptionsMenu(true)

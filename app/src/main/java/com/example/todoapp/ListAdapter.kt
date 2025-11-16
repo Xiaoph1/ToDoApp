@@ -4,6 +4,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todoapp.data.models.Priority
 import com.example.todoapp.data.models.ToDoData
@@ -46,6 +48,13 @@ class ListAdapter: RecyclerView.Adapter<ListAdapter.MyViewHolder>() {
         // 1. 设置标题和描述（注意：你之前调用了两次 bindTitle，应该区分 bindTitle 和 bindDescription）
         holder.bindTitle(currentData.title) // 绑定标题
         holder.bindDescription(currentData.description) // 绑定描述（需要在 ViewHolder 中新增这个方法）
+
+        holder.binding.rowBackground.setOnClickListener{ view ->
+            // 关键修正：用 Navigation.findNavController(view) 获取导航控制器
+            val action = ListFragmentDirections.actionListFragmentToUpdateFragment(dataList[position])
+            Navigation.findNavController(view)
+                .navigate(action)
+        }
 
         // 2. 根据优先级设置 priority_indicator 的背景色
         val priority = currentData.priority

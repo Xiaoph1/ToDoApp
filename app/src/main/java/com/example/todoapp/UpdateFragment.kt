@@ -7,18 +7,47 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.navArgs
+import com.example.todoapp.data.models.Priority
+import com.example.todoapp.databinding.FragmentAddBinding
+import com.example.todoapp.databinding.FragmentUpdateBinding
 
 class UpdateFragment : Fragment() {
+
+    private val args by navArgs<UpdateFragmentArgs>()
+
+    private val mSharedViewModel:SharedViewModel by viewModels()
+
+    private var _binding: FragmentUpdateBinding? = null
+    private val binding get() = _binding!! // 非空断言，确保在视图销毁后不再使用
+
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        //set menu
-        setHasOptionsMenu(true)
 
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_update, container, false)
+//        val view = inflater.inflate(R.layout.fragment_update, container, false)
+
+        //set menu
+        _binding = FragmentUpdateBinding.inflate(inflater, container, false)
+        setHasOptionsMenu(true)
+
+        binding.currentTitleEt.setText(args.currentItem.title)
+        binding.currentDescriptionEt.setText(args.currentItem.description)
+        binding.currentPrioritiesSpinner.setSelection(parsePriority(args.currentItem.priority))
+        binding.currentPrioritiesSpinner.onItemSelectedListener = mSharedViewModel.listener
+
+        return binding.root
+    }
+
+    // 关键补充：视图销毁时解绑 Binding，避免内存泄漏
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -26,4 +55,12 @@ class UpdateFragment : Fragment() {
     }
 
 
+    private fun parsePriority(priority: Priority):Int{
+        return when(priority){
+            Priority.HIGH->0
+            Priority.MEDIUM->1
+            Priority.LOW->2
+        }
+
+    }
 }
