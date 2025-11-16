@@ -38,6 +38,8 @@ class AddFragment : Fragment() {
 //
 //        return view
         _binding = FragmentAddBinding.inflate(inflater, container, false)
+        binding.prioritiesSpinner.onItemSelectedListener = mSharedViewModel.listener
+
         return binding.root // 返回布局根视图
     }
 
