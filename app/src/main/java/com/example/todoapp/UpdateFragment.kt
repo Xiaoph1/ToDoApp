@@ -29,22 +29,19 @@ class UpdateFragment : Fragment() {
     private val binding get() = _binding!! // 非空断言，确保在视图销毁后不再使用
 
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
 
-        // Inflate the layout for this fragment
-//        val view = inflater.inflate(R.layout.fragment_update, container, false)
-
-        //set menu
+        //
         _binding = FragmentUpdateBinding.inflate(inflater, container, false)
+        binding.args = args
         setHasOptionsMenu(true)
 
-        binding.currentTitleEt.setText(args.currentItem.title)
-        binding.currentDescriptionEt.setText(args.currentItem.description)
-        binding.currentPrioritiesSpinner.setSelection(mSharedViewModel.parsePriorityToInt(args.currentItem.priority))
+//        binding.currentTitleEt.setText(args.currentItem.title)
+//        binding.currentDescriptionEt.setText(args.currentItem.description)
+//        binding.currentPrioritiesSpinner.setSelection(mSharedViewModel.parsePriorityToInt(args.currentItem.priority))
         binding.currentPrioritiesSpinner.onItemSelectedListener = mSharedViewModel.listener
 
         return binding.root

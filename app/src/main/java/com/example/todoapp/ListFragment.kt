@@ -37,6 +37,11 @@ class ListFragment : Fragment() {
     ): View? {
         // 只使用ViewBinding
         _binding = FragmentListBinding.inflate(inflater, container, false)
+        binding.lifecycleOwner = this
+        binding.mSharedViewModel = mSharedViewModel
+
+//        setupRecyclerview()
+
         setHasOptionsMenu(true)
 
         // 通过binding初始化RecyclerView
@@ -48,16 +53,11 @@ class ListFragment : Fragment() {
             adapter.setData(data)
         })
 
-        mSharedViewModel.emptyDatabase.observe(viewLifecycleOwner,Observer{
-            showEmptyDatabaseViews(it)
-        })
+
 
         //set menu
         setHasOptionsMenu(true)
 
-        binding.floatingActionButton.setOnClickListener {
-            findNavController().navigate(R.id.action_listFragment_to_addFragment)
-        }
 
         return  return binding.root
     }
@@ -69,15 +69,6 @@ class ListFragment : Fragment() {
     }
 
 
-    private fun showEmptyDatabaseViews(emptyDatabase:Boolean) {
-        if(emptyDatabase){
-            binding.noDataImageView?.visibility = View.VISIBLE
-            binding.noDataTextView?.visibility = View.VISIBLE
-        }else{
-            binding.noDataImageView?.visibility = View.INVISIBLE
-            binding.noDataTextView?.visibility = View.INVISIBLE
-        }
-    }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.list_fragment_menu,menu)
