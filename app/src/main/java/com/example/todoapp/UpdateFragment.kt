@@ -9,6 +9,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -60,11 +61,14 @@ class UpdateFragment : Fragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if(item.itemId == R.id.menu_save){
-            updateItem()
+        when(item.itemId){
+            R.id.menu_save->updateItem()
+            R.id.menu_delete->confirmItemRemoval()
+
         }
         return super.onOptionsItemSelected(item)
     }
+
 
     private fun updateItem() {
         val title = binding.currentTitleEt.text.toString()
@@ -89,6 +93,25 @@ class UpdateFragment : Fragment() {
             Toast.makeText(requireContext(),"Please fill out all fields.",Toast.LENGTH_SHORT).show()
 
         }
+    }
+
+    //show AlertDialog to confirm removal
+    private fun confirmItemRemoval() {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setPositiveButton("Yes"){_,_->
+            mToDoViewModel.deleteItem(args.currentItem)
+            Toast.makeText(
+                requireContext(),
+                "Successfully Removed:${args.currentItem.title}",
+                Toast.LENGTH_SHORT
+            ).show()
+            findNavController().navigate(R.id.action_updateFragment_to_listFragment)
+        }
+
+        builder.setNegativeButton("No"){_,_->}
+        builder.setTitle("Delete ${args.currentItem.title}?")
+        builder.setMessage("Are you sure you want to remove ${args.currentItem.title}?")
+        builder.create().show()
     }
 
 
